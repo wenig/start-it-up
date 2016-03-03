@@ -1,6 +1,6 @@
 # start-it-up
 ##try something
-Press on the **add Table** button two times. Two new elements should show up.
+Press the **add Table** button two times. Two new elements should show up.
 
 At the first one: write `hello world` in the value field.
 
