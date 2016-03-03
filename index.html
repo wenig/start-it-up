@@ -1,0 +1,145 @@
+<html>
+<head>
+<script src="jquery-1.12.1.min.js"></script>
+<script src="jquery.gridster.min.js"></script>
+<link href="jquery.gridster.min.css" rel="stylesheet">
+<script>
+var gridster;
+var inside;
+$(function(){ //DOM Ready
+
+    $(".gridster ul").gridster({
+        widget_margins: [10, 10],
+        widget_base_dimensions: [140, 140],
+		extra_cols: 7
+    });
+	gridster = $(".gridster ul").gridster().data('gridster');
+});
+
+function add_table(){
+	gridster.add_widget('<li data-arrow="right" class=\'new\'><button class="remove" onclick=\'gridster.remove_widget( $(this).parent() );\'>x</button><button onclick=\'toLeft(this);\'>left</button><button onclick=\'toRight(this);\'>right</button><button onclick=\'toUp(this);\'>up</button><button onclick=\'toDown(this);\'>down</button><div></div><input placeholder="value" class="value" type="text"></input><input placeholder="javascript" class="operation" type="text"></input></li>', 1, 1);
+}
+
+function toLeft(node){
+	$(node).parent().attr("data-arrow", "left");
+}
+
+function toRight(node){
+	$(node).parent().attr("data-arrow", "right");
+}
+
+function toUp(node){
+	$(node).parent().attr("data-arrow", "up");
+}
+
+function toDown(node){
+	$(node).parent().attr("data-arrow", "down");
+}
+
+function go(val, col, row){
+	var dir = $('li[data-col="'+col+'"][data-row="'+row+'"]').first().attr("data-arrow");
+	if(dir == undefined){
+		return true;
+	}
+	if(val == null || val == undefined || val == ''){
+		val = $('li[data-col="'+col+'"][data-row="'+row+'"]').first().children("input.value").val();
+	}
+	var op = $('li[data-col="'+col+'"][data-row="'+row+'"]').first().children("input.operation").val().replace(/~/g, val);
+	if(op != null && op != undefined && op != ''){
+		val = eval(op);
+	}
+	switch(dir){
+		case 'left': go(val, col-1, row);
+		break;
+		case 'right': go(val, col+1, row);
+		break;
+		case 'up': go(val, col, row-1);
+		break;
+		case 'down': go(val, col, row+1);
+		break;
+	}
+}
+</script>
+<style>
+body{
+background: #004756;
+}
+
+li{
+background: #fff;
+list-style-type:none;
+}
+
+.inside li{
+	background: #000;
+}
+
+.gridster, button{
+	float:left;
+}
+button{
+	background:white;
+	border:none;
+}
+
+li div{
+display: block;
+background: white;
+position: absolute;
+z-index:-1;
+}
+
+li[data-arrow="left"] div{
+width: 40px;
+height: 2px;
+top: 69px;
+left: -30px;
+}
+
+li[data-arrow="right"] div{
+width: 40px;
+height: 2px;
+top: 69px;
+right: -30px;
+}
+
+li[data-arrow="down"] div{
+width: 2px;
+height: 40px;
+bottom: -30px;
+left: 69px;
+}
+
+li[data-arrow="up"] div{
+width: 2px;
+height: 40px;
+top: -30px;
+left: 69px;
+}
+
+li .value{
+	display:none;
+}
+
+li[data-col="1"][data-row="1"]{
+box-shadow: inset 0 0 10px #0f0;
+}
+
+li[data-col="1"][data-row="1"] .value{
+	display:block;
+}
+
+input{
+width:120px;
+}
+</style>
+</head>
+<body>
+<button onclick="add_table();">add Table</button><button onclick="go(null, 1, 1);">go</button><br><hr>
+<div class="gridster">
+    <ul>
+        
+    </ul>
+</div>
+</body>
+</html>
